@@ -154,6 +154,7 @@ def css_aplicacao(paleta: dict[str, str]) -> str:
       .st-key-export_report {{
         display: flex;
         justify-content: flex-end;
+        padding-top: 1.55rem;
       }}
       .st-key-export_report button {{
         min-width: 10rem !important;
@@ -233,9 +234,48 @@ def css_aplicacao(paleta: dict[str, str]) -> str:
           padding: 0.75rem;
           box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
         }}
-        .st-key-export_report,
-        .st-key-export_report button {{
+        .rh-brand {{ text-align: center; }}
+        .st-key-ano {{ align-items: center; }}
+        .st-key-ano [role="radiogroup"] {{
+          width: min(100%, 22rem);
+          margin-inline: auto;
+        }}
+        .st-key-ano [role="radiogroup"] button {{
+          flex: 1 1 0;
+        }}
+        .st-key-export_report {{
+          justify-content: center;
+          padding-top: 0;
           width: 100% !important;
+        }}
+        .st-key-export_report button {{
+          width: min(100%, 22rem) !important;
+          min-width: 0 !important;
+        }}
+        .st-key-pagina [role="radiogroup"] {{
+          display: grid !important;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 0.25rem;
+          width: 100%;
+        }}
+        .st-key-pagina [role="radiogroup"] button {{
+          justify-content: center;
+          min-width: 0 !important;
+          width: 100%;
+        }}
+        .st-key-tema {{ align-items: center; }}
+        .st-key-tema [role="radiogroup"] {{
+          justify-content: center;
+          margin-inline: auto;
+        }}
+        .rh-kpi {{
+          display: flex;
+          min-height: 110px;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 0.8rem;
+          text-align: center;
         }}
         .st-key-dashboard_body {{ padding: 0.75rem; }}
         .rh-page-title {{ font-size: 1.45rem; }}
@@ -249,8 +289,10 @@ def css_aplicacao(paleta: dict[str, str]) -> str:
       /* Celular: cartões e ações ocupam uma coluna para facilitar a leitura. */
       @media (max-width: 480px) {{
         .rh-brand {{ font-size: 1.25rem; }}
+        .st-key-pagina [role="radiogroup"] {{
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }}
         .rh-kpi-grid {{ grid-template-columns: 1fr; }}
-        .rh-kpi {{ min-height: auto; }}
         .rh-kpi-value {{ font-size: 1.35rem; }}
         .st-key-pagina button {{
           font-size: 0.82rem !important;
@@ -302,10 +344,8 @@ with st.container(key="fixed_menu"):
         )
 
     with coluna_exportar:
-        # Compensa a altura do rótulo "Ano" e alinha as bases dos controles.
-        st.space("small")
         # O espaço é criado agora e preenchido depois que os filtros existirem.
-        # Esse padrão mantém o botão no canto superior direito.
+        # O CSS alinha o botão com o ano no desktop e o centraliza no celular.
         slot_exportar = st.empty()
 
     # Em telas estreitas, os sete botões quebram em linhas para evitar rolagem.
@@ -332,16 +372,16 @@ with st.container(key="fixed_menu"):
         wrap=True,
     ):
         mes_selecionado = st.selectbox(
-            "Mês", opcoes_mes, key="mes", width=155
+            "Mês", opcoes_mes, key="mes", width="stretch"
         )
         filial_selecionada = st.selectbox(
-            "Filial", opcoes_filial, key="filial", width=210
+            "Filial", opcoes_filial, key="filial", width="stretch"
         )
         departamento_selecionado = st.selectbox(
             "Departamento",
             opcoes_departamento,
             key="departamento",
-            width=285,
+            width="stretch",
         )
         tema_selecionado = st.segmented_control(
             "Cores do painel",

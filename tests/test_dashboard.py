@@ -11,11 +11,13 @@ from openpyxl import load_workbook
 from streamlit.testing.v1 import AppTest
 
 from src.dashboard_core import (
+    PALETAS,
     PAGINAS,
     FiltrosDashboard,
     carregar_bases,
     construir_pagina,
     criar_relatorio_excel,
+    grafico_barras,
     preparar_contexto,
     validar_dashboard,
 )
@@ -139,3 +141,55 @@ def test_interface_streamlit_inicia_sem_excecoes():
     assert not app.exception
     assert len(app.segmented_control) >= 3
     assert len(app.selectbox) == 3
+
+
+def test_rotulos_mensais_ficam_legiveis_em_tela_compacta():
+    dados = pd.DataFrame(
+        {
+            "mes": [
+                "JAN",
+                "FEV",
+                "MAR",
+                "ABR",
+                "MAI",
+                "JUN",
+                "JUL",
+                "AGO",
+                "SET",
+                "OUT",
+                "NOV",
+                "DEZ",
+            ],
+            "investimento": [
+                75_000,
+                68_000,
+                78_000,
+                69_000,
+                75_000,
+                72_000,
+                78_000,
+                71_000,
+                69_000,
+                67_000,
+                76_000,
+                74_000,
+            ],
+        }
+    )
+
+    figura = grafico_barras(
+        dados,
+        "mes",
+        "investimento",
+        "Investimento por mês",
+        PALETAS["Roxo moderno"],
+        moeda=True,
+    )
+
+    serie = figura.data[0]
+    assert serie.textposition == "inside"
+    assert serie.insidetextanchor == "end"
+    assert serie.textangle == -90
+    assert figura.layout.uniformtext.mode == "hide"
+    assert figura.layout.margin.l == 48
+    assert figura.layout.margin.r == 24

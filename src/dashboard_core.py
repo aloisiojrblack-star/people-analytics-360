@@ -488,12 +488,19 @@ def finalizar_figura(
     altura: int = 360,
     mostrar_legenda: bool = False,
 ) -> go.Figure:
-    """Centraliza título, posiciona rótulos externos e aplica o tema."""
+    """Centraliza o título, posiciona rótulos e aplica o tema responsivo."""
 
+    barras_horizontais = False
     for serie in figura.data:
         if serie.type == "bar":
+            barras_horizontais = barras_horizontais or serie.orientation == "h"
             valores = serie.x if serie.orientation == "h" else serie.y
-            serie.update(text=valores, textposition="outside", cliponaxis=False)
+            atualizacoes: dict[str, object] = {"text": valores}
+            # Alguns gráficos compactos definem uma posição própria para evitar
+            # que muitos rótulos externos se sobreponham no celular.
+            if not serie.textposition:
+                atualizacoes.update(textposition="outside", cliponaxis=False)
+            serie.update(**atualizacoes)
         elif serie.type == "scatter":
             modo = serie.mode or "lines"
             if "text" not in modo:
@@ -516,7 +523,12 @@ def finalizar_figura(
         paper_bgcolor=paleta["painel"],
         plot_bgcolor=paleta["painel"],
         font={"color": paleta["texto"], "family": "Arial"},
-        margin={"l": 75, "r": 70, "t": 75, "b": 70},
+        margin={
+            "l": 110 if barras_horizontais else 48,
+            "r": 35 if barras_horizontais else 24,
+            "t": 70,
+            "b": 60,
+        },
         showlegend=mostrar_legenda,
         legend={
             "orientation": "h",
@@ -527,7 +539,9 @@ def finalizar_figura(
             "title_text": "",
         },
         hoverlabel={"bgcolor": paleta["painel_2"], "font_color": paleta["texto"]},
-        uniformtext={"minsize": 9, "mode": "show"},
+        # Se não houver espaço suficiente, ocultar um rótulo é mais legível do
+        # que sobrepô-lo. O valor exato continua disponível no toque/hover.
+        uniformtext={"minsize": 8, "mode": "hide"},
     )
     figura.update_xaxes(gridcolor=paleta["grade"], zeroline=False, automargin=True)
     figura.update_yaxes(gridcolor=paleta["grade"], zeroline=False, automargin=True)
@@ -546,7 +560,7 @@ def grafico_barras(
     moeda: bool = False,
     casas: int = 0,
 ) -> go.Figure:
-    """Cria barras verticais ou horizontais com rótulos externos."""
+    """Cria barras responsivas com rótulos legíveis em telas compactas."""
 
     dados = dataframe.copy()
     if horizontal:
@@ -577,6 +591,17 @@ def grafico_barras(
         figura.update_traces(texttemplate="R$ %{text:.2s}")
     else:
         figura.update_traces(texttemplate=f"%{{text:,.{casas}f}}")
+
+    # Em séries mensais, 12 rótulos externos não cabem lado a lado no celular.
+    # Colocá-los dentro das barras, na vertical, mantém cada valor associado à
+    # barra correta e preserva o número completo no toque/hover.
+    if not horizontal and len(dados) >= 8:
+        figura.update_traces(
+            textposition="inside",
+            insidetextanchor="end",
+            textangle=-90,
+            cliponaxis=True,
+        )
     return finalizar_figura(figura, titulo, paleta)
 
 
