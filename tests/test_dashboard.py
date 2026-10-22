@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
 import pytest
+from openpyxl import load_workbook
 from streamlit.testing.v1 import AppTest
 
 from src.dashboard_core import (
@@ -91,7 +93,41 @@ def test_exportacao_excel(recursos_dashboard):
     arquivo = criar_relatorio_excel(contexto, filtros, diagnostico)
 
     assert arquivo.startswith(b"PK")
-    assert len(arquivo) > 100_000
+    assert len(arquivo) > 5_000
+
+    pasta = load_workbook(BytesIO(arquivo), data_only=True)
+    assert pasta["Resumo"].sheet_state == "hidden"
+    assert pasta["Qualidade"].sheet_state == "hidden"
+
+    abas_visiveis = [
+        planilha for planilha in pasta.worksheets if planilha.sheet_state == "visible"
+    ]
+    assert {planilha.title for planilha in abas_visiveis} == {
+        "Indicadores_Mensais",
+        "Por_Departamento",
+        "Movimentacoes",
+        "Treinamentos",
+        "Recrutamento",
+    }
+
+    campos_individuais = {
+        "matricula",
+        "colaborador",
+        "data_nascimento",
+        "salario",
+        "salario_mensal",
+        "genero",
+        "pcd",
+        "lgbtqia",
+    }
+    for planilha in abas_visiveis:
+        assert planilha["A1"].value == (
+            "Dados integralmente fictícios para demonstração."
+        )
+        cabecalhos = {
+            str(celula.value).casefold() for celula in planilha[3] if celula.value
+        }
+        assert cabecalhos.isdisjoint(campos_individuais)
 
 
 def test_interface_streamlit_inicia_sem_excecoes():

@@ -224,6 +224,39 @@ def css_aplicacao(paleta: dict[str, str]) -> str:
       .rh-kpi-value {{ color: {paleta['texto']}; font-size: 1.55rem; font-weight: 760; }}
       .rh-kpi-note {{ color: {paleta['texto_suave']}; font-size: 0.76rem; }}
       .rh-brand {{ color: {paleta['texto']}; font-size: 1.5rem; font-weight: 800; }}
+
+      /* Tablet: reduz densidade e evita que o menu ocupe a tela durante a rolagem. */
+      @media (max-width: 768px) {{
+        .st-key-fixed_menu {{
+          position: static;
+          top: auto;
+          padding: 0.75rem;
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+        }}
+        .st-key-export_report,
+        .st-key-export_report button {{
+          width: 100% !important;
+        }}
+        .st-key-dashboard_body {{ padding: 0.75rem; }}
+        .rh-page-title {{ font-size: 1.45rem; }}
+        .rh-page-subtitle {{ font-size: 0.88rem; }}
+        .rh-kpi-grid {{
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.6rem;
+        }}
+      }}
+
+      /* Celular: cartões e ações ocupam uma coluna para facilitar a leitura. */
+      @media (max-width: 480px) {{
+        .rh-brand {{ font-size: 1.25rem; }}
+        .rh-kpi-grid {{ grid-template-columns: 1fr; }}
+        .rh-kpi {{ min-height: auto; }}
+        .rh-kpi-value {{ font-size: 1.35rem; }}
+        .st-key-pagina button {{
+          font-size: 0.82rem !important;
+          padding-inline: 0.55rem !important;
+        }}
+      }}
     </style>
     """
 
@@ -247,7 +280,10 @@ opcoes_mes = ["Total"] + list(MESES.values())
 # O container com ``key`` recebe a classe usada no CSS ``position: sticky``.
 with st.container(key="fixed_menu"):
     coluna_marca, coluna_ano, coluna_exportar = st.columns(
-        [1.75, 0.78, 0.47], gap="medium", vertical_alignment="bottom"
+        [1.75, 0.78, 0.47],
+        gap="medium",
+        vertical_alignment="bottom",
+        wrap=True,
     )
 
     with coluna_marca:
@@ -272,7 +308,7 @@ with st.container(key="fixed_menu"):
         # Esse padrão mantém o botão no canto superior direito.
         slot_exportar = st.empty()
 
-    # Sete botões permanecem visíveis; se a tela for estreita, a faixa rola.
+    # Em telas estreitas, os sete botões quebram em linhas para evitar rolagem.
     pagina_selecionada = st.segmented_control(
         "Página do dashboard",
         options=PAGINAS,
@@ -281,7 +317,7 @@ with st.container(key="fixed_menu"):
         bind="query-params",
         label_visibility="collapsed",
         width="stretch",
-        wrap=False,
+        wrap=True,
     )
 
     # O container horizontal mantém os filtros à esquerda. Cada widget recebe
@@ -318,7 +354,7 @@ with st.container(key="fixed_menu"):
                 "as cores dos cartões e gráficos."
             ),
             width="content",
-            wrap=False,
+            wrap=True,
         )
 
 
@@ -357,16 +393,16 @@ if mes_selecionado != "Total":
 # A função lambda adia a criação do Excel até o clique. Isso deixa a primeira
 # abertura mais rápida e exporta exatamente o contexto filtrado desta execução.
 slot_exportar.download_button(
-    "Export Report",
+    "Baixar relatório",
     data=lambda: criar_relatorio_excel(contexto, filtros, diagnostico),
     file_name=f"Relatorio_RH_{nome_periodo}.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     icon=":material/download:",
     type="primary",
     on_click="ignore",
-    width=160,
+    width="stretch",
     key="export_report",
-    help="Baixar tabelas e resumo executivo conforme os filtros atuais.",
+    help="Baixar somente indicadores agregados conforme os filtros atuais.",
 )
 
 
@@ -400,7 +436,9 @@ def mostrar_graficos(graficos: list[dict[str, object]]) -> None:
         "toImageButtonOptions": {"format": "png", "scale": 2},
     }
     for inicio in range(0, len(graficos), 2):
-        colunas = st.columns(2)
+        # No computador são dois gráficos por linha; no celular, as colunas
+        # empilham automaticamente para preservar rótulos e áreas clicáveis.
+        colunas = st.columns(2, wrap=True)
         for deslocamento, item in enumerate(graficos[inicio : inicio + 2]):
             with colunas[deslocamento]:
                 with st.container(border=True, height="stretch"):

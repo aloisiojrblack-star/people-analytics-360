@@ -1582,51 +1582,182 @@ def criar_relatorio_excel(
     filtros: FiltrosDashboard,
     diagnostico: pd.DataFrame,
 ) -> bytes:
-    """Gera um arquivo Excel em memória com as tabelas já filtradas."""
+    """Gera um Excel agregado, sem registros individuais ou identificadores."""
+
+    aviso = "Dados integralmente fictícios para demonstração."
+
+    mensal = contexto["mensal"]
+    indicadores_mensais = (
+        mensal.groupby("competencia", as_index=False)
+        .agg(
+            colaboradores=("matricula", "nunique"),
+            salarios_totais=("salario_mensal", "sum"),
+            beneficios_totais=("beneficios_total", "sum"),
+            desempenho_medio=("media_desempenho", "mean"),
+        )
+        .rename(
+            columns={
+                "competencia": "Competência",
+                "colaboradores": "Colaboradores",
+                "salarios_totais": "Salários totais",
+                "beneficios_totais": "Benefícios totais",
+                "desempenho_medio": "Desempenho médio",
+            }
+        )
+        .round(2)
+    )
+
+    por_departamento = (
+        mensal.groupby("departamento", as_index=False)
+        .agg(
+            colaboradores=("matricula", "nunique"),
+            salarios_totais=("salario_mensal", "sum"),
+            beneficios_totais=("beneficios_total", "sum"),
+            desempenho_medio=("media_desempenho", "mean"),
+        )
+        .rename(
+            columns={
+                "departamento": "Departamento",
+                "colaboradores": "Colaboradores",
+                "salarios_totais": "Salários totais",
+                "beneficios_totais": "Benefícios totais",
+                "desempenho_medio": "Desempenho médio",
+            }
+        )
+        .round(2)
+    )
+
+    admissoes = (
+        contexto["admissoes"]
+        .groupby("departamento", as_index=False)
+        .size()
+        .rename(columns={"departamento": "Departamento", "size": "Admissões"})
+    )
+    desligamentos = (
+        contexto["desligamentos"]
+        .groupby("departamento", as_index=False)
+        .size()
+        .rename(
+            columns={"departamento": "Departamento", "size": "Desligamentos"}
+        )
+    )
+    movimentacoes = (
+        admissoes.merge(desligamentos, on="Departamento", how="outer")
+        .fillna(0)
+        .sort_values("Departamento")
+        .reset_index(drop=True)
+    )
+    for coluna in ["Admissões", "Desligamentos"]:
+        movimentacoes[coluna] = movimentacoes[coluna].astype(int)
+
+    treinamentos = (
+        contexto["treinamentos"]
+        .groupby("departamento", as_index=False)
+        .agg(
+            treinamentos=("id_treinamento", "nunique"),
+            carga_horaria_total=("carga_horaria", "sum"),
+            investimento_total=("investimento_treinamento", "sum"),
+        )
+        .rename(
+            columns={
+                "departamento": "Departamento",
+                "treinamentos": "Treinamentos",
+                "carga_horaria_total": "Carga horária total",
+                "investimento_total": "Investimento total",
+            }
+        )
+        .round(2)
+    )
+
+    recrutamento = (
+        contexto["recrutamento"]
+        .groupby("departamento", as_index=False)
+        .agg(
+            vagas=("quantidade_vagas", "sum"),
+            inscricoes=("inscricoes", "sum"),
+            candidatos_banco=("candidatos_banco", "sum"),
+            salario_ofertado_medio=("salario_ofertado", "mean"),
+            dias_fechamento_medio=("dias_fechamento", "mean"),
+        )
+        .rename(
+            columns={
+                "departamento": "Departamento",
+                "vagas": "Vagas",
+                "inscricoes": "Inscrições",
+                "candidatos_banco": "Candidatos no banco",
+                "salario_ofertado_medio": "Salário ofertado médio",
+                "dias_fechamento_medio": "Dias para fechamento (média)",
+            }
+        )
+        .round(2)
+    )
+
+    tabelas_agregadas = {
+        "Indicadores_Mensais": indicadores_mensais,
+        "Por_Departamento": por_departamento,
+        "Movimentacoes": movimentacoes,
+        "Treinamentos": treinamentos,
+        "Recrutamento": recrutamento,
+    }
 
     buffer = BytesIO()
     with pd.ExcelWriter(buffer, engine="openpyxl") as escritor:
+        # As abas visíveis contêm somente indicadores consolidados. O aviso fica
+        # na primeira linha de cada uma para acompanhar qualquer tabela copiada.
+        for aba, tabela in tabelas_agregadas.items():
+            exportavel = tabela.copy()
+            for coluna in exportavel.select_dtypes(include="category").columns:
+                exportavel[coluna] = exportavel[coluna].astype(str)
+            exportavel.to_excel(
+                escritor,
+                sheet_name=aba,
+                index=False,
+                startrow=2,
+            )
+
+        # Resumo e Qualidade apoiam a rastreabilidade técnica do arquivo, mas
+        # permanecem ocultos para que o usuário veja apenas as visões executivas.
         resumo_executivo(contexto, filtros).to_excel(
             escritor, sheet_name="Resumo", index=False
         )
         diagnostico.to_excel(escritor, sheet_name="Qualidade", index=False)
 
-        # Remove o nome do colaborador antes de enviar dados ao navegador.
-        tabelas = {
-            "Base_Mensal": contexto["mensal"],
-            "Snapshot": contexto["snapshot"],
-            "Admissoes": contexto["admissoes"].drop(
-                columns=["colaborador"], errors="ignore"
-            ),
-            "Desligamentos": contexto["desligamentos"].drop(
-                columns=["colaborador"], errors="ignore"
-            ),
-            "Treinamentos": contexto["treinamentos"],
-            "Recrutamento": contexto["recrutamento"],
-        }
-        for aba, tabela in tabelas.items():
-            exportavel = tabela.copy()
-            # O Excel não conhece o dtype Categorical do pandas; texto é portátil.
-            for coluna in exportavel.select_dtypes(include="category").columns:
-                exportavel[coluna] = exportavel[coluna].astype(str)
-            exportavel.to_excel(escritor, sheet_name=aba[:31], index=False)
-
-        # Formatação simples: cabeçalho azul, filtro e primeira linha congelada.
+        # Formatação simples: aviso, cabeçalho azul, filtro e painel congelado.
         from openpyxl.styles import Font, PatternFill
+        from openpyxl.utils import get_column_letter
 
         preenchimento = PatternFill("solid", fgColor="24527A")
         fonte = Font(color="FFFFFF", bold=True)
         for planilha in escritor.book.worksheets:
-            planilha.freeze_panes = "A2"
-            planilha.auto_filter.ref = planilha.dimensions
-            for celula in planilha[1]:
+            aba_oculta = planilha.title in {"Resumo", "Qualidade"}
+            linha_cabecalho = 1 if aba_oculta else 3
+
+            if aba_oculta:
+                planilha.sheet_state = "hidden"
+                planilha.freeze_panes = "A2"
+            else:
+                ultima_coluna = get_column_letter(max(planilha.max_column, 1))
+                planilha.merge_cells(f"A1:{ultima_coluna}1")
+                planilha["A1"] = aviso
+                planilha["A1"].font = Font(bold=True, italic=True, color="7F6000")
+                planilha.freeze_panes = "A4"
+
+            ultima_coluna = get_column_letter(max(planilha.max_column, 1))
+            planilha.auto_filter.ref = (
+                f"A{linha_cabecalho}:{ultima_coluna}{planilha.max_row}"
+            )
+            for celula in planilha[linha_cabecalho]:
                 celula.fill = preenchimento
                 celula.font = fonte
             for coluna in planilha.columns:
                 largura = max(len(str(celula.value or "")) for celula in coluna)
-                planilha.column_dimensions[coluna[0].column_letter].width = min(
+                letra_coluna = get_column_letter(coluna[0].column)
+                planilha.column_dimensions[letra_coluna].width = min(
                     max(largura + 2, 12), 40
                 )
+
+        # Garante que o Excel abra diretamente na primeira visão agregada.
+        escritor.book.active = 0
 
     buffer.seek(0)
     return buffer.getvalue()
