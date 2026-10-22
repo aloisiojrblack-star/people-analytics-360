@@ -147,25 +147,6 @@ python -m pytest -q
 
 Os testes verificam os contratos das bases, identificadores fictícios, construção das sete páginas, exportação Excel e inicialização da interface.
 
-## Publicação com GitHub Desktop
-
-1. Abra o GitHub Desktop e selecione **File > Add local repository**.
-2. Escolha esta pasta do projeto.
-3. Confira a lista de arquivos. Notebooks, históricos, ambientes e bases não autorizadas não devem aparecer.
-4. Registre o primeiro commit: `Preparar dashboard para publicação`.
-5. Clique em **Publish repository**.
-6. Nome `people-analytics-360`.
-7. Para manter o portfólio público, desmarque **Keep this code private** antes de publicar.
-
-## Deploy no Streamlit Community Cloud
-
-1. Acesse [share.streamlit.io](https://share.streamlit.io/) e escolha **Create app**.
-2. Selecione o repositório e a branch `main`.
-3. Informe `streamlit_app.py` como arquivo principal.
-4. Em **Advanced settings**, selecione Python 3.12.
-5. Não cadastre segredos: esta aplicação usa apenas os CSVs fictícios versionados.
-6. Clique em **Deploy** e, após a validação, adicione a URL pública à seção Demonstração deste README.
-
 ## Observações principais
 
 - separar interface e regras de negócio melhora manutenção e testes;
