@@ -1,2 +1,2 @@
-"""Funções compartilhadas do Super Projeto RH."""
+"""Funções compartilhadas do People Analytics 360."""
 

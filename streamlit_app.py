@@ -1,4 +1,4 @@
-r"""Super Projeto RH: dashboard executivo de People Analytics em Streamlit.
+r"""People Analytics 360: dashboard executivo desenvolvido em Streamlit.
 
 Execute com:
 
@@ -32,13 +32,13 @@ from src.dashboard_core import (
 # ``set_page_config`` precisa aparecer antes dos outros elementos visuais.
 # ``layout="wide"`` usa a largura da tela, apropriada para dashboards.
 st.set_page_config(
-    page_title="Super Projeto RH",
+    page_title="People Analytics 360",
     page_icon=":material/analytics:",
     layout="wide",
     initial_sidebar_state="collapsed",
     menu_items={
         "About": (
-            "Super Projeto RH. Dados sintéticos de 2024 a 2026 "
+            "People Analytics 360. Dados sintéticos de 2024 a 2026 "
             "para estudo e portfólio."
         )
     },
@@ -224,7 +224,6 @@ def css_aplicacao(paleta: dict[str, str]) -> str:
       .rh-kpi-value {{ color: {paleta['texto']}; font-size: 1.55rem; font-weight: 760; }}
       .rh-kpi-note {{ color: {paleta['texto_suave']}; font-size: 0.76rem; }}
       .rh-brand {{ color: {paleta['texto']}; font-size: 1.5rem; font-weight: 800; }}
-      .rh-brand-note {{ color: {paleta['texto_suave']}; font-size: 0.78rem; }}
     </style>
     """
 
@@ -252,10 +251,7 @@ with st.container(key="fixed_menu"):
     )
 
     with coluna_marca:
-        st.html(
-            "<div class='rh-brand'>Super Projeto RH</div>"
-            "<div class='rh-brand-note'>Projeto RH · Dashboard web executivo</div>"
-        )
+        st.html("<div class='rh-brand'>People Analytics 360</div>")
 
     with coluna_ano:
         # As opções são strings para sincronizar corretamente com a URL.
