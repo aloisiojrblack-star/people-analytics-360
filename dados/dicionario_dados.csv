@@ -1,0 +1,106 @@
+﻿base;campo;tipo_dado;aceita_nulos;chave;granularidade;descricao
+Cadastros;matricula;object;Não;Sim;Uma linha por colaborador;Identificador fictício único do colaborador.
+Cadastros;colaborador;object;Não;Não;Uma linha por colaborador;Nome fictício criado apenas para fins didáticos.
+Cadastros;genero;object;Não;Não;Uma linha por colaborador;Autodeclaração sintética de gênero.
+Cadastros;idade;int64;Não;Não;Uma linha por colaborador;Idade do colaborador na data de referência.
+Cadastros;formacao_academica;object;Não;Não;Uma linha por colaborador;Maior nível de escolaridade informado.
+Cadastros;estado_civil;object;Não;Não;Uma linha por colaborador;Estado civil sintético do colaborador.
+Cadastros;filial;object;Não;Não;Uma linha por colaborador;Unidade organizacional fictícia.
+Cadastros;departamento;object;Não;Não;Uma linha por colaborador;Área organizacional responsável.
+Cadastros;cargo;object;Não;Não;Uma linha por colaborador;Cargo ocupado ou solicitado na vaga.
+Cadastros;data_admissao;datetime64[ns];Não;Não;Uma linha por colaborador;Data de entrada do colaborador.
+Cadastros;data_desligamento;datetime64[ns];Sim;Não;Uma linha por colaborador;"Data de saída; vazia quando não existe desligamento."
+Cadastros;salario;float64;Não;Não;Uma linha por colaborador;Salário de referência do cadastro sintético.
+Cadastros;pcd;object;Não;Não;Uma linha por colaborador;Indicador sintético de pessoa com deficiência.
+Cadastros;aprendiz;object;Não;Não;Uma linha por colaborador;Indicador de vínculo de aprendizagem.
+Cadastros;status;object;Não;Não;Uma linha por colaborador;Situação do vínculo na data final da base.
+Cadastros;lideranca;object;Não;Não;Uma linha por colaborador;Indicador derivado do cargo de liderança.
+Cadastros;tipo_rescisao;object;Não;Não;Uma linha por colaborador;Classificação do desligamento.
+Cadastros;motivo_rescisao;object;Não;Não;Uma linha por colaborador;Motivo sintético associado ao desligamento.
+Cadastros;centro_custo;object;Não;Não;Uma linha por colaborador;Código e nome do centro de custo.
+Cadastros;data_nascimento;datetime64[ns];Não;Não;Uma linha por colaborador;Data sintética usada para calcular a idade.
+Cadastros;ano_nascimento;int32;Não;Não;Uma linha por colaborador;Ano sintético de nascimento.
+Cadastros;faixa_etaria;category;Não;Não;Uma linha por colaborador;Agrupamento etário usado nas análises populacionais.
+Cadastros;geracao;category;Não;Não;Uma linha por colaborador;Geração estimada pelo ano de nascimento.
+Cadastros;estagiario;object;Não;Não;Uma linha por colaborador;Indicador de vínculo de estágio.
+Cadastros;lgbtqia;object;Não;Não;Uma linha por colaborador;"Autodeclaração sintética; não deve ser inferida."
+Cadastros;tipo_vaga;object;Não;Não;Uma linha por colaborador;Motivo ou modalidade de abertura da posição.
+Base_Mensal;competencia;datetime64[ns];Não;Sim;Uma linha por colaborador e competência;Último dia do mês representado pelo snapshot.
+Base_Mensal;matricula;object;Não;Sim;Uma linha por colaborador e competência;Identificador fictício único do colaborador.
+Base_Mensal;genero;object;Não;Não;Uma linha por colaborador e competência;Autodeclaração sintética de gênero.
+Base_Mensal;idade;int64;Não;Não;Uma linha por colaborador e competência;Idade do colaborador na data de referência.
+Base_Mensal;faixa_etaria;category;Sim;Não;Uma linha por colaborador e competência;Agrupamento etário usado nas análises populacionais.
+Base_Mensal;ano_nascimento;int32;Não;Não;Uma linha por colaborador e competência;Ano sintético de nascimento.
+Base_Mensal;geracao;category;Não;Não;Uma linha por colaborador e competência;Geração estimada pelo ano de nascimento.
+Base_Mensal;formacao_academica;object;Não;Não;Uma linha por colaborador e competência;Maior nível de escolaridade informado.
+Base_Mensal;filial;object;Não;Não;Uma linha por colaborador e competência;Unidade organizacional fictícia.
+Base_Mensal;departamento;object;Não;Não;Uma linha por colaborador e competência;Área organizacional responsável.
+Base_Mensal;centro_custo;object;Não;Não;Uma linha por colaborador e competência;Código e nome do centro de custo.
+Base_Mensal;cargo;object;Não;Não;Uma linha por colaborador e competência;Cargo ocupado ou solicitado na vaga.
+Base_Mensal;pcd;object;Não;Não;Uma linha por colaborador e competência;Indicador sintético de pessoa com deficiência.
+Base_Mensal;aprendiz;object;Não;Não;Uma linha por colaborador e competência;Indicador de vínculo de aprendizagem.
+Base_Mensal;estagiario;object;Não;Não;Uma linha por colaborador e competência;Indicador de vínculo de estágio.
+Base_Mensal;tipo_vaga;object;Não;Não;Uma linha por colaborador e competência;Motivo ou modalidade de abertura da posição.
+Base_Mensal;lgbtqia;object;Não;Não;Uma linha por colaborador e competência;"Autodeclaração sintética; não deve ser inferida."
+Base_Mensal;lideranca;object;Não;Não;Uma linha por colaborador e competência;Indicador derivado do cargo de liderança.
+Base_Mensal;salario;float64;Não;Não;Uma linha por colaborador e competência;Salário de referência do cadastro sintético.
+Base_Mensal;horas_previstas;int64;Não;Não;Uma linha por colaborador e competência;Horas de trabalho programadas no mês.
+Base_Mensal;horas_ausencia;float64;Não;Não;Uma linha por colaborador e competência;Horas de ausência registradas no mês.
+Base_Mensal;taxa_absenteismo;float64;Não;Não;Uma linha por colaborador e competência;Horas de ausência divididas pelas horas previstas.
+Base_Mensal;nota_assiduidade;float64;Não;Não;Uma linha por colaborador e competência;Nota sintética de assiduidade, em escala de 1 a 5.
+Base_Mensal;nota_criatividade;float64;Não;Não;Uma linha por colaborador e competência;Nota sintética de criatividade, em escala de 1 a 5.
+Base_Mensal;nota_pontualidade;float64;Não;Não;Uma linha por colaborador e competência;Nota sintética de pontualidade, em escala de 1 a 5.
+Base_Mensal;nota_produtividade;float64;Não;Não;Uma linha por colaborador e competência;Nota sintética de produtividade, em escala de 1 a 5.
+Base_Mensal;nota_resolucao_problemas;float64;Não;Não;Uma linha por colaborador e competência;Nota sintética de resolucao problemas, em escala de 1 a 5.
+Base_Mensal;nota_trabalho_equipe;float64;Não;Não;Uma linha por colaborador e competência;Nota sintética de trabalho equipe, em escala de 1 a 5.
+Base_Mensal;media_desempenho;float64;Não;Não;Uma linha por colaborador e competência;Média aritmética das seis dimensões de desempenho.
+Base_Mensal;avaliacao_desempenho;float64;Não;Não;Uma linha por colaborador e competência;Cópia da média de desempenho para compatibilidade didática.
+Base_Mensal;satisfacao;float64;Não;Não;Uma linha por colaborador e competência;Nota sintética de satisfação, de 1 a 5.
+Base_Mensal;salario_mensal;float64;Não;Não;Uma linha por colaborador e competência;Salário ajustado ao ano da competência.
+Base_Mensal;decimo_terceiro_provisionado;float64;Não;Não;Uma linha por colaborador e competência;Provisão mensal de um doze avos do salário.
+Base_Mensal;beneficio_transporte;float64;Não;Não;Uma linha por colaborador e competência;Valor mensal fictício do benefício transporte.
+Base_Mensal;beneficio_idiomas;float64;Não;Não;Uma linha por colaborador e competência;Valor mensal fictício do benefício idiomas.
+Base_Mensal;beneficio_graduacao;float64;Não;Não;Uma linha por colaborador e competência;Valor mensal fictício do benefício graduacao.
+Base_Mensal;beneficio_pos_graduacao;float64;Não;Não;Uma linha por colaborador e competência;Valor mensal fictício do benefício pos graduacao.
+Base_Mensal;beneficio_saude;float64;Não;Não;Uma linha por colaborador e competência;Valor mensal fictício do benefício saude.
+Base_Mensal;beneficios_total;float64;Não;Não;Uma linha por colaborador e competência;Soma dos benefícios mensais da linha.
+Base_Mensal;custo_rescisao;float64;Não;Não;Uma linha por colaborador e competência;Custo fictício reconhecido no mês do desligamento.
+Base_Mensal;custo_total_pessoal;float64;Não;Não;Uma linha por colaborador e competência;Salário, 13º, benefícios e rescisão somados.
+Base_Mensal;ano;int32;Não;Não;Uma linha por colaborador e competência;Ano derivado da data principal da linha.
+Base_Mensal;mes;int32;Não;Não;Uma linha por colaborador e competência;Número do mês derivado da data principal da linha.
+Treinamentos;id_treinamento;object;Não;Sim;Uma linha por participação em treinamento;Chave única da participação em treinamento.
+Treinamentos;competencia;datetime64[ns];Não;Não;Uma linha por participação em treinamento;Último dia do mês representado pelo snapshot.
+Treinamentos;matricula;object;Não;Não;Uma linha por participação em treinamento;Identificador fictício único do colaborador.
+Treinamentos;filial;object;Não;Não;Uma linha por participação em treinamento;Unidade organizacional fictícia.
+Treinamentos;departamento;object;Não;Não;Uma linha por participação em treinamento;Área organizacional responsável.
+Treinamentos;centro_custo;object;Não;Não;Uma linha por participação em treinamento;Código e nome do centro de custo.
+Treinamentos;cargo;object;Não;Não;Uma linha por participação em treinamento;Cargo ocupado ou solicitado na vaga.
+Treinamentos;nome_treinamento;object;Não;Não;Uma linha por participação em treinamento;Nome do curso ou ação de aprendizagem.
+Treinamentos;tipo_treinamento;object;Não;Não;Uma linha por participação em treinamento;Classificação da ação de treinamento.
+Treinamentos;carga_horaria;int64;Não;Não;Uma linha por participação em treinamento;Duração do treinamento em horas.
+Treinamentos;data_treinamento;datetime64[ns];Não;Não;Uma linha por participação em treinamento;Data de realização do treinamento.
+Treinamentos;modalidade;object;Não;Não;Uma linha por participação em treinamento;Formato online, presencial ou híbrido.
+Treinamentos;status_treinamento;object;Não;Não;Uma linha por participação em treinamento;Situação da participação no treinamento.
+Treinamentos;investimento_treinamento;float64;Não;Não;Uma linha por participação em treinamento;Investimento fictício da participação.
+Treinamentos;ano;int32;Não;Não;Uma linha por participação em treinamento;Ano derivado da data principal da linha.
+Treinamentos;mes;int32;Não;Não;Uma linha por participação em treinamento;Número do mês derivado da data principal da linha.
+Recrutamento;id_vaga;object;Não;Sim;Uma linha por requisição de vaga;Chave única da requisição de vaga.
+Recrutamento;data_abertura;datetime64[ns];Não;Não;Uma linha por requisição de vaga;Data de abertura da requisição.
+Recrutamento;data_fechamento;datetime64[ns];Sim;Não;Uma linha por requisição de vaga;"Data de fechamento; vazia para vagas não fechadas."
+Recrutamento;ano;int32;Não;Não;Uma linha por requisição de vaga;Ano derivado da data principal da linha.
+Recrutamento;mes;int32;Não;Não;Uma linha por requisição de vaga;Número do mês derivado da data principal da linha.
+Recrutamento;filial;object;Não;Não;Uma linha por requisição de vaga;Unidade organizacional fictícia.
+Recrutamento;departamento;object;Não;Não;Uma linha por requisição de vaga;Área organizacional responsável.
+Recrutamento;centro_custo;object;Não;Não;Uma linha por requisição de vaga;Código e nome do centro de custo.
+Recrutamento;cargo;object;Não;Não;Uma linha por requisição de vaga;Cargo ocupado ou solicitado na vaga.
+Recrutamento;tipo_vaga;object;Não;Não;Uma linha por requisição de vaga;Motivo ou modalidade de abertura da posição.
+Recrutamento;motivo_abertura;object;Não;Não;Uma linha por requisição de vaga;Justificativa sintética da requisição.
+Recrutamento;status_vaga;object;Não;Não;Uma linha por requisição de vaga;Situação atual da requisição.
+Recrutamento;quantidade_vagas;int64;Não;Não;Uma linha por requisição de vaga;Número de posições solicitadas na requisição.
+Recrutamento;inscricoes;int64;Não;Não;Uma linha por requisição de vaga;Quantidade de inscrições recebidas.
+Recrutamento;candidatos_banco;int64;Não;Não;Uma linha por requisição de vaga;Novos candidatos elegíveis para o banco de talentos.
+Recrutamento;salario_ofertado;float64;Não;Não;Uma linha por requisição de vaga;Salário mensal oferecido na requisição.
+Recrutamento;dias_fechamento;float64;Sim;Não;Uma linha por requisição de vaga;Dias entre abertura e fechamento da vaga.
+Recrutamento;fonte_recrutamento;object;Não;Não;Uma linha por requisição de vaga;Canal de atração utilizado.
+Recrutamento;modelo_trabalho;object;Não;Não;Uma linha por requisição de vaga;Modelo presencial, híbrido ou remoto.
+Recrutamento;recrutador_responsavel;object;Não;Não;Uma linha por requisição de vaga;Equipe responsável pela condução da vaga.

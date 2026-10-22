@@ -1,0 +1,36 @@
+# Tema fixo de base. As quatro paletas selecionáveis atualizam menu, cartões e
+# gráficos; este arquivo garante uma aparência profissional antes do primeiro clique.
+
+[theme]
+base = "dark"
+primaryColor = "#D4A72C"
+backgroundColor = "#0B1220"
+secondaryBackgroundColor = "#172033"
+textColor = "#E5EEF8"
+linkColor = "#60A5FA"
+borderColor = "#34425A"
+font = "sans-serif"
+baseFontSize = 14
+baseFontWeight = 400
+headingFontSizes = ["30px", "24px", "20px", "17px", "15px", "13px"]
+headingFontWeights = [750, 700, 650, 600, 600, 600]
+metricValueFontSize = "2rem"
+metricValueFontWeight = 750
+baseRadius = "10px"
+buttonRadius = "8px"
+showWidgetBorder = true
+showSidebarBorder = true
+paddingTop = "0.75rem"
+paddingBottom = "2rem"
+chartCategoricalColors = ["#4EA8DE", "#31C48D", "#D4A72C", "#EF4444", "#A78BFA", "#38BDF8"]
+dataframeBorderColor = "#34425A"
+dataframeHeaderBackgroundColor = "#24527A"
+dataframeHeaderTextColor = "#FFFFFF"
+
+[browser]
+gatherUsageStats = false
+
+[server]
+runOnSave = true
+fileWatcherType = "poll"
+

@@ -1,0 +1,5 @@
+# Dependências necessárias para executar e validar o dashboard.
+-r requirements.txt
+
+# Ferramentas de desenvolvimento local.
+pytest>=8.3,<10

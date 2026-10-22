@@ -1,0 +1,47 @@
+# Python
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Arquivos pessoais e históricos do projeto
+Projeto_RH/
+documentacao/
+output/
+tmp/
+*.pdf
+*.docx
+*.pptx
+*.log
+*.inspect.ndjson
+
+# Excel e bases intermediárias
+*.xlsx
+*.xlsm
+
+# Configurações locais e segredos
+.env
+.env.*
+.streamlit/secrets.toml
+.vscode/
+.idea/
+
+# Sistema operacional
+Thumbs.db
+.DS_Store
+
+# Bloqueia qualquer base adicionada acidentalmente
+dados/*
+
+# Libera somente as bases fictícias necessárias
+!dados/base_rh_colaboradores.csv
+!dados/base_rh_mensal_2024_2026.csv
+!dados/base_rh_recrutamento_2024_2026.csv
+!dados/base_rh_treinamentos_2024_2026.csv
+!dados/dicionario_dados.csv
